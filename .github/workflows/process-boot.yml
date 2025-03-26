@@ -1,10 +1,10 @@
-name: Process Boot Image
+name: Process Boot Image with Payload
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,6 +23,15 @@ jobs:
 
     - name: Process files
       run: ./process.sh
+      env:
+        PAYLOAD_PATH: uploads/payload.bin  # 用户上传文件的路径
+        KERNEL_PATH: uploads/Image
+
+    - name: Cache payload-dumper-go
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/payload-dumper-go
+        key: ${{ runner.os }}-payload-dumper-go-${{ hashFiles('**/payload-dumper-go') }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
