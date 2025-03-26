@@ -24,14 +24,8 @@ jobs:
     - name: Process files
       run: ./process.sh
       env:
-        PAYLOAD_PATH: uploads/payload.bin  # 用户上传文件的路径
+        BOOT_PATH: uploads/boot.img  # 用户上传文件的路径
         KERNEL_PATH: uploads/Image
-
-    - name: Cache payload-dumper-go
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/payload-dumper-go
-        key: ${{ runner.os }}-payload-dumper-go-${{ hashFiles('**/payload-dumper-go') }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
