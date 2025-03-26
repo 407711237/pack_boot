@@ -17,8 +17,8 @@ jobs:
     - name: Set up MagiskBoot
       run: |
         sudo apt-get update && sudo apt-get install -y wget
-        wget https://github.com/topjohnwu/MagiskBoot/releases/download/v5.3.4/magiskboot-5.3.4.zip
-        unzip magiskboot-5.3.4.zip
+        wget https://github.com/svoboda18/magiskboot/releases/download/1.0-3/magiskboot.zip
+        unzip magiskboot.zip
         chmod +x magiskboot
 
     - name: Process files
