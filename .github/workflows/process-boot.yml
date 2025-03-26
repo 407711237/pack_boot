@@ -1,0 +1,31 @@
+name: Process Boot Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up MagiskBoot
+      run: |
+        sudo apt-get update && sudo apt-get install -y wget
+        wget https://github.com/topjohnwu/MagiskBoot/releases/download/v5.3.4/magiskboot-5.3.4.zip
+        unzip magiskboot-5.3.4.zip
+        chmod +x magiskboot
+
+    - name: Process files
+      run: ./process.sh
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: new-boot.img
+        path: ./boot.img.new
