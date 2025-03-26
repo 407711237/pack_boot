@@ -1,16 +1,12 @@
 #!/bin/bash
 
 # 定义文件路径
-PAYLOAD="${PAYLOAD_PATH}"
+BOOT="${BOOT_PATH}"
 KERNEL="${KERNEL_PATH}"
-EXTRACTED_BOOT="extracted_boot.img"
 OUTPUT="boot.img.new"
 
-# 使用magiskboot提取boot.img
-magiskboot extract "$PAYLOAD" boot "$EXTRACTED_BOOT"
-
 # 解包提取的boot.img
-magiskboot unpack "$EXTRACTED_BOOT"
+magiskboot unpack "$BOOT"
 
 # 删除旧kernel并替换
 rm ./kernel
