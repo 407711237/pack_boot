@@ -46,12 +46,8 @@ jobs:
         echo "./scripts/clone_submodules.sh...."
         ./scripts/clone_submodules.sh
         CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
-
-    - name: Build with parallel jobs
-      run: cmake --build build -j $(nproc)
-
-    - name: Install
-      run: cmake --install build
+        cmake --build build -j $(nproc)
+        cmake --install build
         
     - name: Process files
       run: |
