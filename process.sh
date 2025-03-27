@@ -3,7 +3,6 @@
 # 定义文件路径
 BOOT="${BOOT_PATH}"
 KERNEL="${KERNEL_PATH}"
-OUTPUT="boot.img.new"
 
 # 解包提取的boot.img
 magiskboot unpack "$BOOT"
@@ -12,7 +11,4 @@ magiskboot unpack "$BOOT"
 mv -f "$KERNEL" ./kernel
 
 # 重新打包
-magiskboot repack boot.img "$OUTPUT"
-
-# 清理临时文件
-rm -rf "$EXTRACTED_BOOT"
+magiskboot repack boot.img
