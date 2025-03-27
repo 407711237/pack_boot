@@ -14,12 +14,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up MagiskBoot
+    - name: Build MagiskBoot
       run: |
-        sudo apt-get update && sudo apt-get install -y wget
-        wget https://github.com/svoboda18/magiskboot/releases/download/1.0-3/magiskboot.zip
-        unzip magiskboot.zip
-        chmod +x magiskboot
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt install build-essential lzma-dev liblzma-dev liblz4-dev libbz2-dev \
+                 zlib1g-dev pkg-config clang-15 libc++-15-dev libc++abi-15-dev cmake \
+                 ninja-build rustc cargo
+        git clone https://github.com/PinNaCode/magiskboot_build.git
+        cd ./magiskboot_build
+        CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build -j $(nproc)
+        ./build/magiskboot
+        cmake --install build
 
     - name: Process files
       run: ./process.sh
