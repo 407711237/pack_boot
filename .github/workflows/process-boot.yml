@@ -45,9 +45,7 @@ jobs:
         cd ./magiskboot_build
         echo "./scripts/clone_submodules.sh...."
         ./scripts/clone_submodules.sh
-
-    - name: Configure build
-      run: CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+        CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
 
     - name: Build with parallel jobs
       run: cmake --build build -j $(nproc)
