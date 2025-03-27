@@ -23,6 +23,7 @@ jobs:
                  ninja-build rustc cargo
         git clone https://github.com/PinNaCode/magiskboot_build.git
         cd ./magiskboot_build
+        ./scripts/clone_submodules.sh
         CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build -j $(nproc)
         ./build/magiskboot
