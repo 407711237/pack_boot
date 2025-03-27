@@ -4,11 +4,13 @@
 BOOT="${BOOT_PATH}"
 KERNEL="${KERNEL_PATH}"
 
+cp "$BOOT"./boot.img
+
 # 解包提取的boot.img
-magiskboot unpack "$BOOT"
+magiskboot unpack./boot.img
 
 # 删除旧kernel并替换
-mv -f "$KERNEL" ./kernel
+cp -f "$KERNEL" ./kernel
 
 # 重新打包
-magiskboot repack boot.img
+magiskboot repack./boot.img
