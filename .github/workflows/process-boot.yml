@@ -13,30 +13,48 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/apt
+          ~/.ccache
+          build
+        key: ${{ runner.os }}-magiskboot-${{ hashFiles('**/CMakeLists.txt') }}
 
-    - name: Build MagiskBoot
+    - name: Setup ccache
       run: |
-        echo "apt-get更新...."
-        sudo apt-get update
-        echo "apt-get升级...."
-        sudo apt-get upgrade
-        echo "安装依赖...."
-        sudo apt install build-essential lzma-dev liblzma-dev liblz4-dev libbz2-dev \
-                 zlib1g-dev pkg-config clang-15 libc++-15-dev libc++abi-15-dev cmake \
-                 ninja-build rustc cargo
-        echo "克隆magiskboot仓库"
-        git clone https://github.com/PinNaCode/magiskboot_build.git
-        echo "cd ./magiskboot_build...."
+        sudo apt install ccache -y
+        echo "export PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
+
+    - name: Clone submodules
+      run: |
+        git submodule update --init --recursive
+          
+    - name: Install minimal dependencies
+      run: |
+        sudo apt update && sudo apt install -y \
+          build-essential lzma-dev liblzma-dev liblz4-dev libbz2-dev \
+          zlib1g-dev pkg-config clang-15 libc++-15-dev libc++abi-15-dev cmake \
+          ninja-build rustc cargo
+          
+    - name: Build  MagiskBoot
+      run: |
+        git clone https://github.com/PinNaCode/magiskboot_build.git"
         cd ./magiskboot_build
         echo "./scripts/clone_submodules.sh...."
         ./scripts/clone_submodules.sh
-        echo "设置CC CXX CMAKE...."
-        CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
-        echo "cmake --build build -j $(nproc)...."
-        cmake --build build -j $(nproc)
-        echo "执行cmake --install build...."
-        cmake --install build
 
+    - name: Configure build
+      run: CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build with parallel jobs
+      run: cmake --build build -j $(nproc)
+
+    - name: Install
+      run: cmake --install build
+        
     - name: Process files
       run: |
         chmod +x ./process.sh
