@@ -16,17 +16,25 @@ jobs:
 
     - name: Build MagiskBoot
       run: |
+        echo "apt-get更新...."
         sudo apt-get update
+        echo "apt-get升级...."
         sudo apt-get upgrade
+        echo "安装依赖...."
         sudo apt install build-essential lzma-dev liblzma-dev liblz4-dev libbz2-dev \
                  zlib1g-dev pkg-config clang-15 libc++-15-dev libc++abi-15-dev cmake \
                  ninja-build rustc cargo
+        echo "克隆magiskboot仓库"
         git clone https://github.com/PinNaCode/magiskboot_build.git
+        echo "cd ./magiskboot_build...."
         cd ./magiskboot_build
+        echo "./scripts/clone_submodules.sh...."
         ./scripts/clone_submodules.sh
+        echo "设置CC CXX CMAKE...."
         CC=clang CXX=clang++ cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+        echo "cmake --build build -j $(nproc)...."
         cmake --build build -j $(nproc)
-        ./build/magiskboot
+        echo "执行cmake --install build...."
         cmake --install build
 
     - name: Process files
