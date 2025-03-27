@@ -9,8 +9,7 @@ OUTPUT="boot.img.new"
 magiskboot unpack "$BOOT"
 
 # 删除旧kernel并替换
-rm ./kernel
-mv "$KERNEL" ./
+mv -f "$KERNEL" ./kernel
 
 # 重新打包
 magiskboot repack boot.img "$OUTPUT"
