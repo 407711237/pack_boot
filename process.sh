@@ -14,3 +14,5 @@ cp -f "$KERNEL" ./kernel
 
 # 重新打包
 magiskboot repack ./boot.img
+mkdir ./destBoot
+mv ./new-boot.img ./destBoot/new-boot.img
