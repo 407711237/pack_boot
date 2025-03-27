@@ -38,7 +38,9 @@ jobs:
         cmake --install build
 
     - name: Process files
-      run: ./process.sh
+      run: |
+        chmod +x ./process.sh
+        ./process.sh
       env:
         BOOT_PATH: uploads/boot.img  # 用户上传文件的路径
         KERNEL_PATH: uploads/Image
